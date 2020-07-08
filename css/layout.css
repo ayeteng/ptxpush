@@ -1,0 +1,15 @@
+@import './autocomplete.css';
+
+
+.menu{
+    height: 100vh;
+    width: 260px;
+    background-color: #F2FFF2;
+    float: left;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    background-color: #18c4f9;
+}
