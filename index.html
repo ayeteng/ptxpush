@@ -11,6 +11,7 @@
     <script type="text/javascript" src="./script/leaflet-arrowheads.js"></script>
     <script type="text/javascript" src="./script/leaflet.motion.js"></script>    
     <script type="text/javascript" src="./script/MovingMarker.js"></script>
+    <script type="text/javascript" src="./script/leaflet.motion.min.js"></script>
 
     <script type="text/javascript" src="./script/autocomplete.js"></script>
 
@@ -41,14 +42,29 @@
     document.getElementById('query_date').value = query_date;
 
     // 取得車號
-    async function fetchAsync () {
-        let data = await (await fetch("https://iottrek.owlting.com/api/login/", {
-                                            method: 'POST',
-                                            body: JSON.stringify({"USERNAME": "iot_dev", "PASSWORD": "123456"}),
-                                            headers: new Headers({'Content-Type': 'application/json'})
-                                        })).json();
-        return data;
-    };
+    // 有JWT
+    // async function fetchAsync () {
+    //     let data = await (await fetch("https://iottrek.owlting.com/api/login/", {
+    //                                         method: 'POST',
+    //                                         body: JSON.stringify({"USERNAME": "iot_dev", "PASSWORD": "123456"}),
+    //                                         headers: new Headers({'Content-Type': 'application/json'})
+    //                                     })).json();
+    //     return data;
+    // };
+    // async function fetchJWTAlldevices (jwtoken) {
+    //     return (await (await fetch("https://iottrek-staging.owlting.com/api/jwt/get/alldevices/", {
+    //                                         method: 'POST',
+    //                                         body: JSON.stringify({"filters": {}, "out_field": ["deviceid"]}),
+    //                                         headers: new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtoken})
+    //                     })).json()).map(point_set => point_set[0]);
+    // };
+
+    // fetchAsync()
+    // .then(data => fetchJWTAlldevices(data.token))
+    // .then(data => autocomplete(document.getElementById("car_plate"), data))
+    // .catch(reason => console.log(reason.message))
+
+    // 無JWT
     async function fetchAlldevices (jwtoken) {
         return (await (await fetch("https://iottrek-staging.owlting.com/api/jwt/get/alldevices/", {
                                             method: 'POST',
@@ -57,8 +73,7 @@
                         })).json()).map(point_set => point_set[0]);
     };
 
-    fetchAsync()
-    .then(data => fetchAlldevices(data.token))
+    fetchJWTAlldevices()
     .then(data => autocomplete(document.getElementById("car_plate"), data))
     .catch(reason => console.log(reason.message))
 
@@ -70,32 +85,10 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
-        // console.log(malibuPathPoints);
+
+        // 使用movie marker
         var myline = L.polyline(malibuPathPoints).arrowheads({frequency: 'endonly', size: '12px', yawn: 40, fill: true});
         myline.addTo(map);
-
-
-        // var marker1 = L.icon({
-        //     iconUrl: 'https://i.imgur.com/mRt2rog.png',
-        //     iconSize:     [54.6, 22.7], // size of the icon
-        //     iconAnchor:   [27.3, 11.35], // point of the icon which will correspond to marker's location
-        //     });
-        // var p123456 = [[24.287939, 120.511924], [24.618813,120.731719],
-        // [25.147408, 121.750569], [24.033423, 121.626818], [21.962351,120.778510],[22.621061,120.256785],[24.287939, 120.511924]];
-
-        // marker1 = L.Marker.movingMarker(p123456,[10000, 10000, 10000, 10000,10000,10000], {autostart: true, loop: true,icon: marker1}).addTo(map);
-        // marker1.loops = 0;
-        // marker1.bindPopup('', {closeOnClick: false});
-        // marker1.on('loop', function(e) {
-        //     marker1.loops++;
-        //     if (e.elapsedTime < 50) {
-        //         marker1.bindPopup("<b>第 " + marker1.loops + " 圈</b>")
-        //         marker1.openPopup();
-        //         setTimeout(function() {
-        //             marker1.closePopup();
-        //         }, 2000);
-        //     }
-        // });
 
         var marker1 = L.Marker.movingMarker(malibuPathPoints, speedPathPoints).addTo(map);
         L.polyline(malibuPathPoints).addTo(map);
@@ -117,6 +110,8 @@
 
         marker1.bindPopup('<b>Click me to start !</b>', {closeOnClick: false});
         marker1.openPopup();
+
+        // 使用Antimate moving
 
     }
 
