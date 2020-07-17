@@ -66,14 +66,14 @@
 
     // 無JWT
     async function fetchAlldevices (jwtoken) {
-        return (await (await fetch("https://iottrek-staging.owlting.com/api/jwt/get/alldevices/", {
+        return (await (await fetch("https://iottrek-staging.owlting.com/api/get/alldevices/", {
                                             method: 'POST',
                                             body: JSON.stringify({"filters": {}, "out_field": ["deviceid"]}),
                                             headers: new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtoken})
                         })).json()).map(point_set => point_set[0]);
     };
 
-    fetchJWTAlldevices()
+    fetchAlldevices()
     .then(data => autocomplete(document.getElementById("car_plate"), data))
     .catch(reason => console.log(reason.message))
 
