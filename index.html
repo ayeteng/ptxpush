@@ -37,7 +37,7 @@
     // 取得日期
     let params = new URLSearchParams(location.search);
     let car_plate = params.get('car_plate') ? params.get('car_plate'): "005-FZ";
-    let query_date = params.get('query_date') ? params.get('query_date'): new Date();
+    let query_date = params.get('query_date') ? params.get('query_date'): new Date().Format("yyyy-MM-dd");
     document.getElementById('car_plate').value = car_plate;
     document.getElementById('query_date').value = query_date;
 
@@ -112,6 +112,48 @@
         marker1.openPopup();
 
         // 使用Antimate moving
+
+        // L.motion.polyline([malibuPathPoints], {
+        //     //color: "red",
+        // }, {
+        //     auto: true,
+        //     duration: 5000,
+        //     easing: L.Motion.Ease.easeInOutQuart
+        // }, {
+        //     removeOnEnd: false,
+        //     showMarker: true,
+        // }).addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 
