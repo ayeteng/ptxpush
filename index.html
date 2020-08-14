@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
 
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
 	<script type="text/javascript" src="./script/leaflet.geometryutil.js"></script>
     <script type="text/javascript" src="./script/leaflet-arrowheads.js"></script>
@@ -27,7 +28,7 @@
             <input type="date" id="query_date" name="query_date" style="width:250px;">
             <input type="submit">
         </form>
-        <div id="myDiv"><h5>使用AJAX</h5></div>
+        <div id="description"><h5></h5></div>
     </div>
     <div class="content">
         <div id="mapid" style="width: auto; height: 98vh;"></div>
@@ -153,6 +154,7 @@
 
 
 
+        document.getElementById('description').innerHTML = "<h5>Painting done.</h5>";
 
 
     }
@@ -165,8 +167,16 @@
                         })).json());
     };
 
+    function checkDataAvailability(data) {
+        if (data.output_data) {
+            createMap(data.output_data);
+        } else {
+            document.getElementById('description').innerHTML = "<h5>No data available.</h5>";
+        }
+    };
+
     fetchPTXLocation()
-        .then(data => createMap(data.output_data))
+        .then(data => checkDataAvailability(data))
         .catch(reason => console.log(reason.message));
 
 
